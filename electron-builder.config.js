@@ -15,6 +15,12 @@ const config = {
         "dist/main/**/*",
         "dist/render/**/*"
     ],
+    extraResources: [
+        {
+            from: "src/main/assets/",
+            to: "assets/",
+        }
+    ],
     nsis: {
         oneClick: false,
         allowElevation: true,

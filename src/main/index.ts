@@ -6,14 +6,10 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
     try {
-        const nestApp = await NestFactory.createMicroservice<MicroserviceOptions>(
-            AppModule,
-            {
-                strategy: new ElectronIpcTransport(),
-            },
-        );
-
-        await nestApp.listen();
+        const zmautoApp = await NestFactory.create(AppModule);
+        zmautoApp.connectMicroservice<MicroserviceOptions>({ strategy: new ElectronIpcTransport });
+        await zmautoApp.startAllMicroservices();
+        await zmautoApp.listen(3030);
     } catch (error) {
         console.log(error);
         app.quit();

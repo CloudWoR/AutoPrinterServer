@@ -1,70 +1,83 @@
 import { Module } from '@nestjs/common';
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, session } from 'electron';
 import { join } from 'path';
 
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
+function assetsDir() {
+if (process.env.DEV) {
+    return join(__dirname, '../../src/main/assets');
+    } else {
+    return join(__dirname, '../../../');
+    }
+}
+
 @Module({
-    providers: [{
-        provide: 'WEB_CONTENTS',
-        async useFactory(isDev: boolean) {
-            app.on('window-all-closed', () => {
-                if (process.platform !== 'darwin') {
-                    app.quit();
-                }
-            });
+	providers: [{
+		provide: 'WEB_CONTENTS',
+		async useFactory(isDev: boolean) {
+			app.on('window-all-closed', () => {
+					if (process.platform !== 'darwin') {
+							app.quit();
+					}
+			});
 
-            if (isDev) {
-                if (process.platform === 'win32') {
-                    process.on('message', (data) => {
-                        if (data === 'graceful-exit') {
-                            app.quit();
-                        }
-                    });
-                } else {
-                    process.on('SIGTERM', () => {
-                        app.quit();
-                    });
-                }
-            }
+			const extensionPath = join(assetsDir(), 'extensions/6.1.4_0');
+			app.whenReady().then(async () => {
+					await session.defaultSession.loadExtension(extensionPath);
+			})
 
-            await app.whenReady();
+			if (isDev) {
+					if (process.platform === 'win32') {
+							process.on('message', (data) => {
+									if (data === 'graceful-exit') {
+											app.quit();
+									}
+							});
+					} else {
+							process.on('SIGTERM', () => {
+									app.quit();
+							});
+					}
+				}
 
-            const win = new BrowserWindow({
-                width: 1000,
-                height: 800,
-                webPreferences: {
-                    nodeIntegration: true,
-                    webSecurity: false,
-                    contextIsolation: false,
-                    devTools: isDev,
-                },
-                autoHideMenuBar: !isDev,
-            });
+				await app.whenReady();
 
-            win.maximize();
+				const win = new BrowserWindow({
+					width: 1000,
+					height: 800,
+					webPreferences: {
+							nodeIntegration: true,
+							webSecurity: false,
+							contextIsolation: false,
+							devTools: isDev,
+					},
+					autoHideMenuBar: !isDev,
+				});
 
-            const URL = isDev
-                ? process.env.DEV_SERVER_URL
-                : `file://${join(app.getAppPath(), 'dist/render/index.html')}`;
+				win.maximize();
 
-            win.loadURL(URL);
+				const URL = isDev
+					? process.env.DEV_SERVER_URL
+					: `file://${join(app.getAppPath(), 'dist/render/index.html')}`;
 
-            if (isDev) {
-                win.webContents.openDevTools();
-            }
-            else {
-                win.removeMenu();
-            }
+				win.loadURL(URL);
 
-            win.on('closed', () => {
-                win.destroy();
-            });
+				if (isDev) {
+					win.webContents.openDevTools();
+				}
+				else {
+					win.removeMenu();
+				}
 
-            return win.webContents;
-        },
-        inject: ['IS_DEV']
-    }],
-    exports: ['WEB_CONTENTS']
+				win.on('closed', () => {
+					win.destroy();
+				});
+
+				return win.webContents;
+		},
+		inject: ['IS_DEV']
+	}],
+	exports: ['WEB_CONTENTS']
 })
 export class WinModule { }

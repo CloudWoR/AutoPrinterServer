@@ -1,0 +1,6 @@
+localdb:
+  type: mysql
+  name: LOCAL_DB
+  entities:
+    - >-
+      D:\project\software\YSY\zmauto-server\dist\main/entity/local-entity/*.entity.ts

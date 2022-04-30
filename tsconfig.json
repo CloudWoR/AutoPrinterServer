@@ -1,40 +1,54 @@
 {
-    "compilerOptions": {
-        "target": "ESNext",
-        "module": "ESNext",
-        "moduleResolution": "node",
-        "strict": false,
-        "jsx": "preserve",
-        "sourceMap": true,
-        "resolveJsonModule": true,
-        "esModuleInterop": true,
-        "noImplicitAny": false,
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
-        "baseUrl": ".",
-        "lib": [
-            "esnext",
-            "dom"
-        ],
-        "types": [
-            "vite/client"
-        ],
-        "paths": {
-            "@render/*": [
-                "src/render/*"
-            ],
-            "@main/*": [
-                "src/main/*"
-            ],
-            "@common/*": [
-                "src/common/*"
-            ],
-        }
-    },
-    "include": [
-        "src/**/*.ts",
-        "src/**/*.d.ts",
-        "src/**/*.tsx",
-        "src/**/*.vue"
-    ]
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "strict": false,
+    "jsx": "preserve",
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "noImplicitAny": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "baseUrl": ".",
+    "lib": [
+      "esnext",
+      "dom"
+    ],
+    "types": [
+      "vite/client"
+    ],
+    "paths": {
+      "@render/*": [
+        "src/render/*"
+      ],
+      "@main/*": [
+        "src/main/*"
+      ],
+      "@common/*": [
+        "src/common/*"
+      ],
+      "@libs/utils": [
+        "libs/utils/src"
+      ],
+      "@libs/utils/*": [
+        "libs/utils/src/*"
+      ],
+      "@libs/database": [
+        "libs/database/src"
+      ],
+      "@libs/database/*": [
+        "libs/database/src/*"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "libs/**/*.ts",
+    "libs/**/*.*.ts"
+  ]
 }
