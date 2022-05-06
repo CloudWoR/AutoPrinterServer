@@ -24,7 +24,7 @@ if (process.env.DEV) {
 
 			const extensionPath = join(assetsDir(), 'extensions/6.1.4_0');
 			app.whenReady().then(async () => {
-					await session.defaultSession.loadExtension(extensionPath);
+					// await session.defaultSession.loadExtension(extensionPath);
 			})
 
 			if (isDev) {
